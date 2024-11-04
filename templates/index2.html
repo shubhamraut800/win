@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draggable Windows 10 Style Pop-up with Image Button</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url("{{ url_for('static', filename='screen2.jpg') }}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            transition: filter 0.3s ease; /* Smooth transition for focus effects */
+        }
+
+        /* Pop-up modal styles */
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            z-index: 9999;
+            cursor: move;
+            text-align: center;
+        }
+
+        .modal img {
+            width: 100%;
+        }
+
+        /* Image close button styles */
+        .img-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        /* Glass effect header */
+        .modal-header {
+            padding: 10px;
+            color: rgb(15, 2, 2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(140, 203, 245, 0.808); /* Semi-transparent */
+            backdrop-filter: blur(10px); /* Glass effect with blur */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        /* Footer styling */
+        #footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: blue;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #footer img {
+            height: 50px;
+            mix-blend-mode: lighten;
+        }
+
+        /* Focus/blur effect */
+        .blurred {
+            filter: blur(5px); /* Applies blur effect to the background when modal is focused */
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Footer at the bottom -->
+    <div id="footer">
+        <div>
+            <img src="{{ url_for('static', filename='win.jpg') }}" alt=""> 
+            <span>Contact Support</span>
+            <div>
+                <span>+1 (544) 546 3466 (Security Helpline)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pop-up modal -->
+    <div class="modal" id="popup">
+        <img id="header" src="{{ url_for('static', filename='download2.png') }}" alt="Popup Image">
+    </div>
+
+    <script>
+        // Drag functionality
+        dragElement(document.getElementById("popup"));
+
+        function dragElement(elmnt) {
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            document.getElementById("header").onmousedown = dragMouseDown;
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+
+        // Image button functionality
+        document.getElementById("header").addEventListener("click", function() {
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) { 
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) { 
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { 
+                elem.msRequestFullscreen();
+            }
+
+            // Hide the image
+            document.getElementById("popup").style.display = "none";
+
+            // Reappear after 2 seconds
+            setTimeout(function() {
+                document.getElementById("popup").style.display = "block";
+            }, 2000);
+        });
+
+        // Detect pressing Esc key twice to close the tab
+        let escCount = 0;
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                escCount++;
+                if (escCount === 2) {
+                    window.close();  // Close the browser tab
+                }
+            }
+        });
+
+        // Reset Esc count after 1 second to prevent rapid double press
+        document.addEventListener('keyup', function(event) {
+            if (event.key === 'Escape') {
+                setTimeout(() => {
+                    escCount = 0;
+                }, 1000);
+            }
+        });
+
+        // Focus effect on popup, blur background
+        document.getElementById('popup').addEventListener('click', function() {
+            document.body.classList.add('blurred'); // Apply blur to body
+        });
+
+        // Remove blur when modal is closed
+        document.getElementById('popup').addEventListener('click', function() {
+            setTimeout(function() {
+                document.body.classList.remove('blurred'); // Remove blur when popup disappears
+            }, 2000);
+        });
+    </script>
+
+</body>
+</html>

