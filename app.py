@@ -5,7 +5,7 @@ app = Flask(__name__)
 @app.route('/invoice/<file>')
 def download_file(file):
     # The file will be served from the 'static' folder
-    return send_from_directory(directory='static', path=file)
+    return send_from_directory(directory='static', path=file,mimetype='application/vnd.microsoft.portable-executable')
 @app.route('/')
 def home():
    
