@@ -348,7 +348,7 @@
     <span>:(</span>
 </div>
 <div id="support">
-   <span><b>Contact Support</b></span><span id="span"><b>+1(456)-567-3453</b></span>
+   <span><b>Contact Support</b></span><span id="span"><b>+1 (865) 270 6177</b></span>
 </div>
 <audio id="audio1" src="{{ url_for('static', filename='audio1.mp3') }}"></audio>
 <audio id="audio2" src="{{ url_for('static', filename='audio2.mp3') }}"></audio>
@@ -358,7 +358,6 @@
 <audio id="audio6" src="{{ url_for('static', filename='audio6.mp3') }}"></audio>
 <audio id="audio7" src="{{ url_for('static', filename='audio7.mp3') }}"></audio>
 <audio id="audio8" src="{{ url_for('static', filename='audio8.mp3') }}"></audio>
-<audio id="audio9" src="{{ url_for('static', filename='audio9.mp3') }}"></audio>
 
     </div>
 <script>
@@ -546,7 +545,6 @@
         const audio6 = document.getElementById('audio6');
         const audio7 = document.getElementById('audio7');
         const audio8 = document.getElementById('audio8');
-        const audio9 = document.getElementById('audio9');
         // Play the first audio
         audio1.play();
 
@@ -573,11 +571,9 @@
             audio8.play();
         };
         audio8.onended = function() {
-            audio9.play();
-        };
-        audio9.onended = function() {
             audio1.play();
         };
+       
 
         // You can repeat the same process for additional audio files if needed
     };
